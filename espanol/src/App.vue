@@ -5,7 +5,8 @@
 
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
+    <h1> Name that Dog!</h1>
     <div id='links'>
     <router-link to='/'>HelloWorld</router-link>
     <router-link to='/test'>Test</router-link>

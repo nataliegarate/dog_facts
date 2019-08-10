@@ -4,25 +4,40 @@
 
 <div v-drag-and-drop:options="options" id='container'>
 
+
+
 <div id = 'starter-box-container'>
-<div class='start-box' v-for="image in images" :key="image.id">
- <img :id="image.name" :src="image.url" :alt="image.alt" :key="image.id" class='images' />
+<div class='start-box' v-for="image in images" :key="image.imageUrl">
+ <img :id="image.id" :src="image.imageUrl" :alt="image.alt" :key="image.id" class='images' />
 </div>
 </div>
 
 <div id = 'answer-box-container'>
-<div class='answer-box'  v-for="name in names" :key="name.id" >
-<div class='name'>{{name.name}}</div>
+<div class='answer-box' v-for="name in names" :key="name.name" >
+<div class='name' :id ="name.id" :key="name.name" >{{name.name}} </div>
 </div>
 </div>
+
+
 <div id= 'button-container'>
 <button :disabled="stillDragging" v-on:click="handleClick">Check My Answer</button>
 </div>
 
-<div id='feedback' v-if=clicked>
-  <h1 v-if=result class="won">Congrations!!!</h1>
 
-  <h1 v-else-if=!result>Incorrect!</h1>
+
+<div id='feedback' v-if=clicked>
+
+  <div  v-if=result>
+  <h1 class="won">Congrations!!!</h1>
+  <img src = 'http://www.scalsys.com/backgrounds/doge-white-background/doge-white-background_844858.jpg'>
+  </div>
+
+
+  <div v-else-if=!result>
+
+   <h1> Oh noes! </h1>
+   <img src= 'https://pbs.twimg.com/media/CqAx3eFWgAAk2qd.png'>
+   </div>
   <button v-on:click='playAgain'> Play Again</button>
 </div>
   </div>
@@ -32,46 +47,22 @@
 </template>
 
 <script>
+import { db } from "../firebase";
+const shuffle = require('shuffle-array')
+
+
 export default {
+   beforeMount() {
+   this.init()
+  },
   name: "HelloWorld",
   data() {
     return {
       result: false,
       clicked: false,
       stillDragging: true,
-      images: [
-        {
-          id: 1,
-          name: "Labrador Retriever",
-          url:
-            "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12231410/Labrador-Retriever-On-White-01.jpg",
-          alt: "lorem-ipsum"
-        },
-        {
-          id: 2,
-          name: "German Pinscher",
-          url:
-            "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12233117/German-Pinscher-On-White-01.jpg"
-        },
-        {
-          id: 3,
-          name: "German Shepard",
-          url:
-            "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12213218/German-Shepherd-on-White-00.jpg"
-        },
-        {
-          id: 4,
-          name: "Rat Terrier",
-          url:
-            "https://s3.amazonaws.com/cdn-origin-etr.akc.org/wp-content/uploads/2017/11/12225148/Rat-Terrier-On-White-01.jpg"
-        }
-      ],
-      names: [
-        { id: 1, name: "Labrador Retriever" },
-        { id: 2, name: "German Pinscher" },
-        { id: 3, name: "German Shepard" },
-        { id: 4, name: "Rat Terrier" }
-      ],
+      images: [],
+      names: [],
       options: {
         dropzoneSelector: ".answer-box, .start-box ",
         draggableSelector: "img",
@@ -81,18 +72,41 @@ export default {
           event.droptarget.appendChild(
             document.getElementById(event.items[0].id)
           );
-          this.finished()
+          this.finished();
         }
       }
     };
   },
   methods: {
+   async init() {
+      const yo = db.collection("dogs");
+      const result = await yo.get();
+      result.forEach(doc => {
+        this.images.push({ id: doc.id, imageUrl: doc.data().imageUrl });
+      });
+        this.images = shuffle(this.images)
+
+      this.images = shuffle(this.images)
+       result.forEach(doc => {
+        this.names.push({ id: doc.id, name: doc.data().name });
+      });
+      this.names = shuffle(this.names)
+    },
     handleClick() {
       this.clicked = true;
       const images = [...document.getElementsByClassName("images")];
       const name = [...document.getElementsByClassName("name")];
+      const answerBox = [...document.getElementsByClassName("answer-box")];
+
+        for (let i = 0; i < answerBox.length; i++) {
+        if (name[i].id !== images[i].id) {
+        var wrong = document.createElement('h1');
+        wrong.innerHTML = 'WRONG';
+        answerBox[i].appendChild(wrong)
+        }
+      }
       for (let i = 0; i < name.length; i++) {
-        if (name[i].innerHTML !== images[i].id) {
+        if (name[i].id !== images[i].id) {
           this.result = false;
           return false;
         }
@@ -104,20 +118,35 @@ export default {
       const startBox = [...document.getElementsByClassName("start-box")];
       for (let i = 0; i < startBox.length; i++) {
         if (startBox[i].childNodes.length) {
-          return this.stillDragging = true;
+          return (this.stillDragging = true);
         }
       }
-      return this.stillDragging = false;
+      return (this.stillDragging = false);
     },
     playAgain() {
-      const startBox = [...document.getElementsByClassName('start-box')];
-      const images = [...document.getElementsByClassName("images")];
-      startBox.map((box, i) => (box.appendChild(document.getElementById(images[i].id))))
+      this.names = shuffle(this.names);
+      this.images = shuffle(this.images);
+      this.result = false;
       this.clicked = false;
-      this.stillDragging = true;
+      this.tillDragging = true;
+      const startBox = [...document.getElementsByClassName("start-box")];
+      const images = [...document.getElementsByClassName("images")];
+      const answerBox = [...document.getElementsByClassName("answer-box")];
+      startBox.map((box, i) =>
+        box.appendChild(images[i]))
+      answerBox.map((box, i) =>
+        console.log(box.childNodes))
+
+      for (let i = 0; i < answerBox.length; i++) {
+        if (answerBox[i].childNodes.length > 1) {
+          console.log(answerBox[i].childNodes[1])
+          answerBox[i].removeChild(answerBox[i].childNodes[1])
+        }
+      }
     }
   }
-};
+}
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -131,7 +160,8 @@ export default {
 h3 {
   margin: 40px 0 0;
 }
-img, .won {
+img,
+.won {
   height: 110px;
   border-radius: 25px;
 }
@@ -143,21 +173,18 @@ a {
 .start-box {
   height: 150px;
   width: 200px;
-  /* border-style: solid; */
   background-color: #42b983;
 }
 
 .answer-box {
   padding-top: 20px;
   border-radius: 25px;
-   border-style: solid;
-   border-width: 1px;
-
-  border-color: #2c3e50;
+  /* border-style: solid;
+  border-width: 4px; */
 }
 
 .start-box {
-     border-width: 1px;
+  /* border-width: 0.5px; */
   padding-top: 40px;
   display: flex;
   justify-content: center;
@@ -165,9 +192,8 @@ a {
   padding-top: 40px;
   margin-bottom: 50px;
   border-radius: 25px;
-  border-style: solid;
-  border-color: #2c3e50;
-
+  /* border-style: solid;
+  border-color: #2c3e50; */
 }
 
 #container {
@@ -184,6 +210,11 @@ a {
   flex-direction: row;
   justify-content: space-between;
   align-content: space-between;
+  margin-bottom: 20px;
+}
+
+#answer-box-container {
+  margin-bottom: 30px;
 }
 
 button {
@@ -196,7 +227,7 @@ button {
   border-color: #2ec4a5;
   border-radius: 15px;
 }
-:disabled{
+:disabled {
   background-color: lightgray;
 }
 
@@ -208,17 +239,43 @@ button {
   animation-iteration-count: 1;
 }
 
+h1 {
+  margin-bottom: 0px;
+}
+
 @keyframes shake {
-  0% { transform: translate(1px, 1px) rotate(0deg); }
-  10% { transform: translate(-1px, -2px) rotate(-1deg); }
-  20% { transform: translate(-3px, 0px) rotate(1deg); }
-  30% { transform: translate(3px, 2px) rotate(0deg); }
-  40% { transform: translate(1px, -1px) rotate(1deg); }
-  50% { transform: translate(-1px, 2px) rotate(-1deg); }
-  60% { transform: translate(-3px, 1px) rotate(0deg); }
-  70% { transform: translate(3px, 1px) rotate(-1deg); }
-  80% { transform: translate(-1px, -1px) rotate(1deg); }
-  90% { transform: translate(1px, 2px) rotate(0deg); }
-  100% { transform: translate(1px, -2px) rotate(-1deg); }
+  0% {
+    transform: translate(1px, 1px) rotate(0deg);
+  }
+  10% {
+    transform: translate(-1px, -2px) rotate(-1deg);
+  }
+  20% {
+    transform: translate(-3px, 0px) rotate(1deg);
+  }
+  30% {
+    transform: translate(3px, 2px) rotate(0deg);
+  }
+  40% {
+    transform: translate(1px, -1px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-1px, 2px) rotate(-1deg);
+  }
+  60% {
+    transform: translate(-3px, 1px) rotate(0deg);
+  }
+  70% {
+    transform: translate(3px, 1px) rotate(-1deg);
+  }
+  80% {
+    transform: translate(-1px, -1px) rotate(1deg);
+  }
+  90% {
+    transform: translate(1px, 2px) rotate(0deg);
+  }
+  100% {
+    transform: translate(1px, -2px) rotate(-1deg);
+  }
 }
 </style>

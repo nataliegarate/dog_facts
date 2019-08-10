@@ -9,9 +9,13 @@
   },
   "dependencies": {
     "core-js": "^2.6.5",
+    "firebase": "^6.3.5",
+    "shuffle-array": "^1.0.1",
+    "timer-node": "^1.0.4",
     "vue": "^2.6.10",
     "vue-draggable": "^2.0.2",
     "vue-router": "^3.1.2",
+    "vuefire": "^2.1.2",
     "webpack": "^4.39.1"
   },
   "devDependencies": {
