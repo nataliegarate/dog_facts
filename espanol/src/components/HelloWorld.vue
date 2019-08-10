@@ -4,23 +4,21 @@
 
 <div v-drag-and-drop:options="options" id='container'>
 
-
-
 <div id = 'starter-box-container'>
-<div class='start-box' v-for="image in images" :key="image.imageUrl">
- <img :id="image.id" :src="image.imageUrl" :alt="image.alt" :key="image.id" class='images' />
-</div>
+  <div class='start-box' v-for="image in images" :key="image.imageUrl">
+    <img :id="image.id" :src="image.imageUrl" :alt="image.alt" :key="image.id" class='images' />
+  </div>
 </div>
 
 <div id = 'answer-box-container'>
-<div class='answer-box' v-for="name in names" :key="name.name" >
-<div class='name' :id ="name.id" :key="name.name" >{{name.name}} </div>
-</div>
+  <div class='answer-box' v-for="name in names" :key="name.name" >
+    <div class='name' :id ="name.id" :key="name.name" >{{name.name}} </div>
+  </div>
 </div>
 
 
 <div id= 'button-container'>
-<button :disabled="stillDragging" v-on:click="handleClick">Check My Answer</button>
+  <button :disabled="stillDragging" v-on:click="handleClick">Check My Answer</button>
 </div>
 
 
@@ -28,32 +26,28 @@
 <div id='feedback' v-if=clicked>
 
   <div  v-if=result>
-  <h1 class="won">Congrations!!!</h1>
-  <img src = 'http://www.scalsys.com/backgrounds/doge-white-background/doge-white-background_844858.jpg'>
+    <h1 class="won">You did it!</h1>
+    <img src = 'http://www.scalsys.com/backgrounds/doge-white-background/doge-white-background_844858.jpg'>
   </div>
-
 
   <div v-else-if=!result>
-
-   <h1> Oh noes! </h1>
-   <img src= 'https://pbs.twimg.com/media/CqAx3eFWgAAk2qd.png'>
-   </div>
+    <h1> Oh noes! </h1>
+    <img src= 'https://pbs.twimg.com/media/CqAx3eFWgAAk2qd.png'>
+  </div>
   <button v-on:click='playAgain'> Play Again</button>
 </div>
-  </div>
 
-
+</div>
 
 </template>
 
 <script>
 import { db } from "../firebase";
-const shuffle = require('shuffle-array')
-
+const shuffle = require("shuffle-array");
 
 export default {
-   beforeMount() {
-   this.init()
+  beforeMount() {
+    this.getData();
   },
   name: "HelloWorld",
   data() {
@@ -67,42 +61,51 @@ export default {
         dropzoneSelector: ".answer-box, .start-box ",
         draggableSelector: "img",
         showDropzoneAreas: true,
-        multipleDropzonesItemsDraggingEnabled: true,
-        onDrop(event) {
-          event.droptarget.appendChild(
-            document.getElementById(event.items[0].id)
-          );
+        multipleDropzonesItemsDraggingEnabled: false,
+        onDragend(event) {
+          const startBox = [...document.getElementsByClassName("start-box")];
+          const answerBox = [...document.getElementsByClassName("answer-box")];
+
+          console.log(event.droptarget.className)
+          console.log(answerBox[3])
+
+          if (event.droptarget.childNodes.length === 2 && event.droptarget.className === 'answer-box dragover'){
+             event.droptarget.appendChild(event.items[0])
+          }
+          if (event.droptarget.childNodes.length === 1 && event.droptarget.className === 'start-box dragover'){
+             event.droptarget.appendChild(event.items[0])
+          }
           this.finished();
         }
       }
     };
   },
   methods: {
-   async init() {
+    async getData() {
       const yo = db.collection("dogs");
       const result = await yo.get();
       result.forEach(doc => {
         this.images.push({ id: doc.id, imageUrl: doc.data().imageUrl });
       });
-        this.images = shuffle(this.images)
+      this.images = shuffle(this.images);
 
-      this.images = shuffle(this.images)
-       result.forEach(doc => {
+      this.images = shuffle(this.images);
+      result.forEach(doc => {
         this.names.push({ id: doc.id, name: doc.data().name });
       });
-      this.names = shuffle(this.names)
+      this.names = shuffle(this.names);
     },
     handleClick() {
       this.clicked = true;
       const images = [...document.getElementsByClassName("images")];
       const name = [...document.getElementsByClassName("name")];
       const answerBox = [...document.getElementsByClassName("answer-box")];
-
-        for (let i = 0; i < answerBox.length; i++) {
+      this.stillDragging = true;
+      for (let i = 0; i < answerBox.length; i++) {
         if (name[i].id !== images[i].id) {
-        var wrong = document.createElement('h1');
-        wrong.innerHTML = 'WRONG';
-        answerBox[i].appendChild(wrong)
+          var wrong = document.createElement("h1");
+          wrong.innerHTML = "WRONG";
+          answerBox[i].appendChild(wrong);
         }
       }
       for (let i = 0; i < name.length; i++) {
@@ -110,9 +113,9 @@ export default {
           this.result = false;
           return false;
         }
+      }
         this.result = true;
         return true;
-      }
     },
     finished() {
       const startBox = [...document.getElementsByClassName("start-box")];
@@ -128,25 +131,22 @@ export default {
       this.images = shuffle(this.images);
       this.result = false;
       this.clicked = false;
-      this.tillDragging = true;
+      this.stillDragging = true;
       const startBox = [...document.getElementsByClassName("start-box")];
       const images = [...document.getElementsByClassName("images")];
       const answerBox = [...document.getElementsByClassName("answer-box")];
-      startBox.map((box, i) =>
-        box.appendChild(images[i]))
-      answerBox.map((box, i) =>
-        console.log(box.childNodes))
+      startBox.map((box, i) => box.appendChild(images[i]));
+      answerBox.map((box, i) => console.log(box.childNodes));
 
       for (let i = 0; i < answerBox.length; i++) {
         if (answerBox[i].childNodes.length > 1) {
-          console.log(answerBox[i].childNodes[1])
-          answerBox[i].removeChild(answerBox[i].childNodes[1])
+          console.log(answerBox[i].childNodes[1]);
+          answerBox[i].removeChild(answerBox[i].childNodes[1]);
         }
       }
     }
   }
-}
-
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -155,16 +155,17 @@ export default {
   background-color: #42b983;
   padding-top: 50px;
   padding-bottom: 50px;
-  /* height: 500px */
 }
+
 h3 {
   margin: 40px 0 0;
 }
-img,
-.won {
+
+img, .won {
   height: 110px;
   border-radius: 25px;
 }
+
 a {
   color: #42b983;
 }
@@ -174,17 +175,16 @@ a {
   height: 150px;
   width: 200px;
   background-color: #42b983;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .answer-box {
   padding-top: 20px;
   border-radius: 25px;
-  /* border-style: solid;
-  border-width: 4px; */
 }
 
 .start-box {
-  /* border-width: 0.5px; */
   padding-top: 40px;
   display: flex;
   justify-content: center;
@@ -192,8 +192,6 @@ a {
   padding-top: 40px;
   margin-bottom: 50px;
   border-radius: 25px;
-  /* border-style: solid;
-  border-color: #2c3e50; */
 }
 
 #container {
@@ -227,6 +225,7 @@ button {
   border-color: #2ec4a5;
   border-radius: 15px;
 }
+
 :disabled {
   background-color: lightgray;
 }
