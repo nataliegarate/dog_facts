@@ -6,21 +6,34 @@
 <template>
   <div id="app">
     <!-- <img alt="Vue logo" src="./assets/logo.png"> -->
-    <h1> Name that Dog!</h1>
+    <router-link to='/' id='heading'> <h1>
+      <img height = '20' src = 'https://upload.wikimedia.org/wikipedia/commons/1/12/Black_Paw.svg'> Name that Dog! <img height = '20' src = 'https://upload.wikimedia.org/wikipedia/commons/1/12/Black_Paw.svg'>
+
+      </h1></router-link>
+
     <div id='links'>
-    <router-link to='/'>HelloWorld</router-link>
-    <router-link to='/test'>Test</router-link>
+    <router-link to='/'>Home</router-link>
+    <!-- <router-link to='/easy'>Easy</router-link>
+    <router-link to='/medium'>Medium</router-link>
+    <router-link to='/hard'>Hard</router-link> -->
+    <router-link to='/login'>Login</router-link>
+
+
+
     </div>
   <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import Test from './components/Test.vue'
+import Easy from './components/Easy.vue'
+import Medium from './components/Medium.vue'
+import Hard from './components/Hard.vue'
 import Router from 'vue-router'
 import Vue from 'vue'
 import router from './router.js'
+import Login from './components/Login.vue'
+import Home from './components/Home.vue'
 
 Vue.use(Router)
 
@@ -29,7 +42,7 @@ Vue.use(Router)
 export default {
   name: 'app',
   components: {
-    HelloWorld, Test
+    Easy, Medium, Hard, Login, Home
   }
 }
 </script>
@@ -50,5 +63,11 @@ export default {
   justify-content: space-around;
 margin-left: 100px;
 margin-right: 100px;
+}
+
+#heading {
+  text-decoration: none;
+  color: black;
+
 }
 </style>
