@@ -18,24 +18,23 @@
 
 </form>
 </center>
-
 </div>
 </template>
 
 <script>
 export default {
   name: "Login",
-  data () {
+  data() {
     return {};
   },
   methods: {}
-}
+};
 </script>
 
 
 
 <style scoped>
-#main-container{
+#main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -46,7 +45,8 @@ form {
   width: 400px;
 }
 
-input[type=text], input[type=password] {
+input[type="text"],
+input[type="password"] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -97,12 +97,11 @@ span.psw {
 /* Change styles for span and cancel button on extra small screens */
 @media screen and (max-width: 300px) {
   span.psw {
-     display: block;
-     float: none;
+    display: block;
+    float: none;
   }
   .cancelbtn {
-     width: 100%;
+    width: 100%;
   }
 }
-
 </style>

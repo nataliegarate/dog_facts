@@ -3,7 +3,7 @@
 <template>
 
 <div v-drag-and-drop:options="options" id='container'>
-  <h3> Level 1 of 3 </h3>
+  <h3> Level 1 of 3 !!!!!</h3>
 
 <div id = 'starter-box-container'>
   <div class='start-box' v-for="image in images" :key="image.imageUrl">
@@ -42,7 +42,7 @@
 
   <div v-else-if=!result>
     <img src= 'https://pbs.twimg.com/media/CqAx3eFWgAAk2qd.png'>
-    <h1> Oh noes! </h1>
+      <h1 class= 'lost'> Oh noes! </h1>
       <button v-on:click='playAgain'> Play Again</button>
 
   </div>
@@ -266,7 +266,7 @@ button {
   margin: 0px;
 }
 
-.won {
+.won, .lost {
   /* Start the shake animation and make the animation last for 0.5 seconds */
   animation: shake 1s;
   height: 50px;
