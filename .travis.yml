@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - 10
+
+script: npm run build
+
+deploy:
+  provider: gcs
+  access_key_id: GOOG1ERRQ3RNL7TPONG5U4NL7OICATKMHTP5NIDY2642IIJBA4V6GRA3RLFWI
+  secret_access_key:
+    secure: NE5T7mJyP6icdP1dCjKCn8pA0xNDP6EB8Tabw/8EdbvLRo3c6Nk8DGK0CIxxnb6NTwRfuXxWVHp57ANd4YeCRNRppE+V58IAQijhmMPfr50Fo7rkAy81sx0Z8lR4HFFZwYwTzBord++B6SupDyLRvEzgeNEF7wQpBcX1Nbk2z2BXcGb8QbpI3RiZocNNvUIKkCYXFl2zN540KekLk6eCjKeQCp9c+iR1yUGcZn/zZG2C/67Mc6YW97jE/RTPI1AVoY4xzLocGQ/7WoSs6zj9YB24Iyhp9wTVdj+9yQKImS2YUsMNg2VipopeK1sOmfwhpSH78b1UnlWTkP358GyeKyzEuMu/iJw7DA713MYE/v2JKJcWX5u0ntEgDryRKqAhvQ2cYRSL+RAzmN3vUPVgMb5ERhAh0prixbKbNJWGaZ1CdHOMFViSoOt0ti2ycfJgPeHFqvYZRzD9iDj0mMNELp4BXICQgsb4USpwI8GrW8t2qZ8P20cURXXoeCNVFxn7yGhgkzf4sX7EJ5b/qpx1GP0iNLVd2kOsWZcRc+8hLEXVGtoG77dTn6QF0N1kelUtsLYGN7y78H07ntuiHAtXYrH+ME0qaVFAmlfOBEV4tkn6hP65wOgOGILxj+ExIapeosqAEshGmoeTPr3d8RO9HYWih9dT8GY85K50T5OAI+4=
+  bucket: dogapp.nataliegarate.com
+  skip-cleanup: true
+  local-dir: dist
