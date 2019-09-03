@@ -36,7 +36,6 @@
 
   <div  v-if=result>
     <h1 class="won">You did it!</h1>
-    <img src = 'http://www.scalsys.com/backgrounds/doge-white-background/doge-white-background_844858.jpg'>
      <br>
        <router-link to='/hard'> <button> Next Level </button></router-link>
   </div>

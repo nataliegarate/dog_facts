@@ -12,11 +12,11 @@
       </h1></router-link>
 
     <div id='links'>
-    <router-link to='/'>Home</router-link>
+    <!-- <router-link to='/'>Home</router-link> -->
     <!-- <router-link to='/easy'>Easy</router-link>
     <router-link to='/medium'>Medium</router-link>
     <router-link to='/hard'>Hard</router-link> -->
-    <router-link to='/login'>Login</router-link>
+    <!-- <router-link to='/login'>Login</router-link> -->
 
 
 

@@ -3,7 +3,7 @@
 <template>
 
 <div v-drag-and-drop:options="options" id='container'>
-  <h3> Level 1 of 3 !!!!!</h3>
+  <h3> Level 1 of 3 </h3>
 
 <div id = 'starter-box-container'>
   <div class='start-box' v-for="image in images" :key="image.imageUrl">
@@ -33,7 +33,7 @@
 
   <div  v-if=result>
     <h1 class="won">You did it!</h1>
-    <img src = 'http://www.scalsys.com/backgrounds/doge-white-background/doge-white-background_844858.jpg'>
+
     <br>
        <router-link to='/medium'> <button> Next Level </button></router-link>
 
