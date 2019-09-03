@@ -1,2 +1,3 @@
-Visit: http://dogapp.nataliegarate.com/#/
-An app to imporve your dog breed knowledge.
+Deployed at: http://dogapp.nataliegarate.com/#/
+
+
