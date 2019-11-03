@@ -2,7 +2,7 @@
 
 
 <h3>Getting started </h3>
-1. Fork and clone this repo
+1. Fork and clone this repo <br/>
 2. npm install
 
 <h3> Author Notes </h3>
