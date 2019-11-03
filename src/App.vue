@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import Easy from './components/Easy.vue'
+import Play from './components/Play.vue'
 import Router from 'vue-router'
 import Vue from 'vue'
 import router from './router.js'
@@ -30,7 +30,7 @@ Vue.use(Router)
 export default {
   name: 'app',
   components: {
-    Easy, Home
+    Play, Home
   }
 }
 </script>

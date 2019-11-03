@@ -15,7 +15,7 @@
  <br>
 
  <h3>You'll be an expert in no time!</h3>
-<router-link to='/easy'><button>Get Started</button></router-link>
+<router-link to='/play'><button>Get Started</button></router-link>
 
 
 
