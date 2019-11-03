@@ -4,7 +4,7 @@
 <h3>Getting started </h3>
 1. Fork and clone this repo <br/>
 2. 'npm install' <br/>
-3. 'npm run serve' the app in development mode.
+3. 'npm run serve' starts the app in development mode.
 
 
 <h3> Author Notes </h3>
