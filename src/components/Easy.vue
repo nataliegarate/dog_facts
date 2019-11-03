@@ -7,19 +7,17 @@
 
 <div id = 'starter-box-container'>
   <div class='start-box' v-for="image in images" :key="image.imageUrl">
-
     <img :id="image.id" :src="image.imageUrl" :alt="image.alt" :key="image.id" class='images' />
-
   </div>
 </div>
 
 <div id = 'bottom-row'>
-<div id = 'answer-box-container' v-for="name in names" :key="name.name">
-  <div class='answer-box'>
-    <div class='name' :id ="name.id" :key="name.name" >{{name.name}} </div>
+  <div id = 'answer-box-container' v-for="name in names" :key="name.name">
+    <div class='answer-box'>
+      <div class='name' :id ="name.id" :key="name.name" >{{name.name}} </div>
+    </div>
+    <div class='feedback-box'> </div>
   </div>
-  <div class='wrong-box'> </div>
-</div>
 </div>
 
 
@@ -41,7 +39,6 @@
   </div>
 
   <div v-else-if=!result>
-    <img src= 'https://pbs.twimg.com/media/CqAx3eFWgAAk2qd.png'>
       <h1 class= 'lost'> Oh noes! </h1>
       <button v-on:click='playAgain'> Play Again</button>
 
@@ -55,7 +52,6 @@
 </template>
 
 <script>
-
 import { db } from "../firebase";
 const shuffle = require("shuffle-array");
 
@@ -76,16 +72,20 @@ export default {
       options: {
         dropzoneSelector: ".answer-box, .start-box ",
         draggableSelector: ".images",
-        // showDropzoneAreas: true,
-        // multipleDropzonesItemsDraggingEnabled: false,
         onDragend(event) {
           const startBox = [...document.getElementsByClassName("start-box")];
           const answerBox = [...document.getElementsByClassName("answer-box")];
-          if (event.droptarget.childNodes.length === 2 && event.droptarget.className === 'answer-box dragover'){
-             event.droptarget.appendChild(event.items[0])
+          if (
+            event.droptarget.childNodes.length === 2 &&
+            event.droptarget.className === "answer-box dragover"
+          ) {
+            event.droptarget.appendChild(event.items[0]);
           }
-          if (event.droptarget.childNodes.length === 1 && event.droptarget.className === 'start-box dragover'){
-             event.droptarget.appendChild(event.items[0])
+          if (
+            event.droptarget.childNodes.length === 1 &&
+            event.droptarget.className === "start-box dragover"
+          ) {
+            event.droptarget.appendChild(event.items[0]);
           }
           this.finished();
         }
@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     async getData() {
-      this.images =[];
+      this.images = [];
       this.names = [];
       const yo = db.collection("dogs");
       let result = await yo.get();
@@ -102,39 +102,44 @@ export default {
       let tempData = [];
 
       result.forEach(doc => {
-      tempData.push({ id: doc.id, imageUrl: doc.data().imageUrl, name: doc.data().name });
+        tempData.push({
+          id: doc.id,
+          imageUrl: doc.data().imageUrl,
+          name: doc.data().name
+        });
       });
 
       tempData = shuffle(tempData);
 
-
       for (let i = 0; i < 4; i++) {
-           this.images.push({ id: tempData[i].id, imageUrl: tempData[i].imageUrl});
+        this.images.push({
+          id: tempData[i].id,
+          imageUrl: tempData[i].imageUrl
+        });
       }
       this.images = shuffle(this.images);
 
-
       for (let i = 0; i < 4; i++) {
-           this.names.push({ id: tempData[i].id, name: tempData[i].name });
+        this.names.push({ id: tempData[i].id, name: tempData[i].name });
       }
-
-
       this.names = shuffle(this.names);
     },
     handleClick() {
       this.clicked = true;
       const images = [...document.getElementsByClassName("images")];
       const name = [...document.getElementsByClassName("name")];
-      const wrongBox = [...document.getElementsByClassName("wrong-box")];
+      const wrongBox = [...document.getElementsByClassName("feedback-box")];
       this.stillDragging = true;
       this.showCheck = false;
       for (let i = 0; i < wrongBox.length; i++) {
         var wrong = document.createElement("p");
         if (name[i].id !== images[i].id) {
-          wrong.innerHTML = "<img class='feedback' height=20 src= 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Red_X.svg/240px-Red_X.svg.png'>";
+          wrong.innerHTML =
+            "<img class='feedback' height=20 src= 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Red_X.svg/240px-Red_X.svg.png'>";
           wrongBox[i].append(wrong);
-        } else if (name[i].id === images[i].id){
-           wrong.innerHTML = "<img class='feedback'height=20 src= 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Checkmark_green.svg/417px-Checkmark_green.svg.png'>";
+        } else if (name[i].id === images[i].id) {
+          wrong.innerHTML =
+            "<img class='feedback'height=20 src= 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Checkmark_green.svg/417px-Checkmark_green.svg.png'>";
           wrongBox[i].append(wrong);
         }
       }
@@ -144,8 +149,8 @@ export default {
           return false;
         }
       }
-        this.result = true;
-        return true;
+      this.result = true;
+      return true;
     },
     finished() {
       const startBox = [...document.getElementsByClassName("start-box")];
@@ -158,17 +163,17 @@ export default {
     },
     playAgain() {
       this.showCheck = true;
-      this.getData()
+      this.getData();
       this.result = false;
       this.clicked = false;
       this.stillDragging = true;
       const startBox = [...document.getElementsByClassName("start-box")];
       const images = [...document.getElementsByClassName("images")];
-      const wrongBox = [...document.getElementsByClassName("wrong-box")];
+      const wrongBox = [...document.getElementsByClassName("feedback-box")];
       startBox.map((box, i) => box.appendChild(images[i]));
 
       for (let i = 0; i < wrongBox.length; i++) {
-        wrongBox[i].innerHTML = ""
+        wrongBox[i].innerHTML = "";
       }
     }
   }
@@ -208,7 +213,7 @@ a {
 .answer-box {
   padding-top: 20px;
   border-radius: 25px;
-height: 140px;
+  height: 140px;
 }
 
 .start-box {
@@ -253,20 +258,13 @@ button {
   background-color: lightgray;
 }
 
-.wrong-box-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-top: 0px;
-  padding-top: 0px;
-  height: 80%
-}
 
-.feedback{
+.feedback {
   margin: 0px;
 }
 
-.won, .lost {
+.won,
+.lost {
   /* Start the shake animation and make the animation last for 0.5 seconds */
   animation: shake 1s;
   height: 50px;
@@ -277,7 +275,7 @@ h1 {
   margin: 0;
   height: 20px;
 }
-h3{
+h3 {
   margin: 0px;
 }
 
