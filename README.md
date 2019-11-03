@@ -8,9 +8,9 @@
 
 
 <h3> Author Notes </h3>
-This was created during a 4-day hackathon. I had never worked with Vue.js before and was interested in trying a new framework.
+This was created during a 4-day hackathon. I had never worked with Vue.js before and was fun to experiment with a new framework.
 
-
+</br>
 Deployed at: http://dogapp.nataliegarate.com/#/
 
 
