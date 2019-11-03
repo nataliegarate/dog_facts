@@ -152,14 +152,12 @@ export default {
       for (let i = 0; i < name.length; i++) {
         if (name[i].id !== images[i].id) {
           this.result = false;
-          this.round = 1;
           return false;
         }
       }
       this.result = true;
       if (this.round === 3) {
         this.youWin= true;
-        this.round =1;
       }
       return true;
     },
@@ -186,7 +184,9 @@ export default {
       for (let i = 0; i < wrongBox.length; i++) {
         wrongBox[i].innerHTML = "";
       }
+        this.round = 1;
     }
+
   }
 };
 </script>
