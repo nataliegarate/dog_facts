@@ -25,10 +25,16 @@
 </div>
 
 <div id='feedback' v-if=clicked>
-  <div  v-if=result>
+
+<div v-if= youWin>
+    <h1 class= 'lost'> You win! </h1>
+    <button v-on:click='playAgain'> Play Again</button>
+  </div>
+
+  <div  v-else-if=result>
     <h1 class="won">You did it!</h1>
     <br>
-       <button v-on:click='nextRound'> Next Round </button>
+    <button v-on:click='nextRound'> Next Round </button>
   </div>
 
   <div v-else-if=!result>
@@ -37,6 +43,7 @@
   </div>
 
 </div>
+
 </div>
 
 </template>
@@ -52,6 +59,7 @@ export default {
   name: "Easy",
   data() {
     return {
+      youWin: false,
       round: 1,
       stopDrag: true,
       showCheck: true,
@@ -86,8 +94,9 @@ export default {
   methods: {
 
     nextRound(){
-      console.log('i made it here')
       this.round++
+      this.clicked=false;
+      this.showCheck=true;
       return this.getData()
     },
     async getData() {
@@ -143,10 +152,15 @@ export default {
       for (let i = 0; i < name.length; i++) {
         if (name[i].id !== images[i].id) {
           this.result = false;
+          this.round = 1;
           return false;
         }
       }
       this.result = true;
+      if (this.round === 3) {
+        this.youWin= true;
+      }
+      this.round = 1;
       return true;
     },
     finished() {
