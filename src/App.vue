@@ -30,7 +30,7 @@ Vue.use(Router)
 export default {
   name: 'app',
   components: {
-    Easy, Medium, Hard, Login, Home
+    Easy, Home
   }
 }
 </script>

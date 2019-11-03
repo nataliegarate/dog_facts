@@ -159,8 +159,8 @@ export default {
       this.result = true;
       if (this.round === 3) {
         this.youWin= true;
+        this.round =1;
       }
-      this.round = 1;
       return true;
     },
     finished() {
