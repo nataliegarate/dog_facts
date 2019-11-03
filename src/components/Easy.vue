@@ -3,7 +3,7 @@
 <template>
 
 <div v-drag-and-drop:options="options" id='container'>
-  <h3> Level 1 of 3 </h3>
+  <h3> Round {{round}} of 3 </h3>
 
 <div id = 'starter-box-container'>
   <div class='start-box' v-for="image in images" :key="image.imageUrl">
@@ -20,33 +20,23 @@
   </div>
 </div>
 
-
 <div v-if=showCheck id= 'button-container'>
   <button :disabled="stillDragging" v-on:click="handleClick">Check My Answer</button>
 </div>
 
-
-
 <div id='feedback' v-if=clicked>
-
   <div  v-if=result>
     <h1 class="won">You did it!</h1>
-
     <br>
-       <router-link to='/medium'> <button> Next Level </button></router-link>
-
-
+       <button v-on:click='nextRound'> Next Round </button>
   </div>
 
   <div v-else-if=!result>
-      <h1 class= 'lost'> Oh noes! </h1>
-      <button v-on:click='playAgain'> Play Again</button>
-
+    <h1 class= 'lost'> Oh noes! </h1>
+    <button v-on:click='playAgain'> Play Again</button>
   </div>
 
-
 </div>
-
 </div>
 
 </template>
@@ -62,6 +52,7 @@ export default {
   name: "Easy",
   data() {
     return {
+      round: 1,
       stopDrag: true,
       showCheck: true,
       result: false,
@@ -93,6 +84,12 @@ export default {
     };
   },
   methods: {
+
+    nextRound(){
+      console.log('i made it here')
+      this.round++
+      return this.getData()
+    },
     async getData() {
       this.images = [];
       this.names = [];
@@ -208,6 +205,7 @@ a {
   background-color: #42b983;
   margin-left: 10px;
   margin-right: 10px;
+  margin-bottom: 5px;
 }
 
 .answer-box {
