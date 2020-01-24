@@ -5,7 +5,7 @@
 <div v-drag-and-drop:options="options" id='container'>
   <h3> Round {{round}} of 3 </h3>
 
-<div id = 'starter-box-container'>
+<div id = 'starter-box-container' v-touch="onDragend" >
   <div class='start-box' v-for="image in images" :key="image.imageUrl">
     <img :id="image.id" :src="image.imageUrl" :alt="image.alt" :key="image.id" class='images' />
   </div>
@@ -72,6 +72,11 @@ export default {
         dropzoneSelector: ".answer-box, .start-box ",
         draggableSelector: ".images",
         onDragend(event) {
+          console.log(event)
+          // var e = document.createEvent('TouchEvent');
+          console.log(event)
+          console.log(event.droptarget)
+
           const startBox = [...document.getElementsByClassName("start-box")];
           const answerBox = [...document.getElementsByClassName("answer-box")];
           if (
