@@ -2,7 +2,7 @@
 
 
 <h3>Getting started </h3>
-1. Fork and clone this repo <br/>
+1. Fork and/or clone this repo <br/>
 2. 'npm install' <br/>
 3. 'npm run serve'
 
